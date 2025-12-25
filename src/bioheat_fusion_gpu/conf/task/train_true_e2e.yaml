@@ -1,0 +1,5 @@
+defaults:
+  - /experiments: 2xa100_true_e2e_physics
+  - _self_
+
+name: train_true_e2e

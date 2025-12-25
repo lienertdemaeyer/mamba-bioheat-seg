@@ -1,0 +1,62 @@
+# Main Hydra configuration (training + inference)
+
+defaults:
+  - experiments: mamba_physics_informed
+  # - override hydra/launcher: submitit_slurm
+  - _self_
+
+hydra:
+  run:
+    dir: ${paths.output_dir}/hydra_outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: ${paths.output_dir}/hydra_multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+
+paths:
+  # Data and output paths
+
+  h5_dir: /dodrio/scratch/projects/starting_2025_090/H5
+  mask_path: /dodrio/scratch/projects/starting_2025_090/Annotations/coco_annotations_cooled_area.json
+  output_dir: /dodrio/scratch/projects/starting_2025_090/output_n2n
+  model_path: ${paths.output_dir}/models/bioheat_n2n_v2.pth
+
+data:
+  # Data configuration defaults
+
+  window_size: 100
+  window_step: 50
+  early_fraction: 0.3
+  late_fraction: 0.3
+  num_workers: 8
+  skip_pids:
+    - P05M01
+    - P11M02
+    - P03M03
+
+model:
+  # Model architecture configuration
+
+  base_channels: 32
+  in_channels: 1
+  out_channels: 1
+
+training:
+  # Training configuration defaults
+
+  epochs: 100
+  batch_size: 8
+  lr: 1.0e-4
+  early_stop_patience: 20
+  device: cuda
+
+gpu:
+  # GPU configuration defaults
+
+  enabled: true
+  device_id: 0
+
+output:
+  # Output configuration defaults
+
+  save_model: true
+  save_plots: true

@@ -1,0 +1,5 @@
+defaults:
+  - /experiments: mamba_physics_informed
+  - _self_
+
+name: train_mamba_pinn

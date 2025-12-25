@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Packaging / build
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+.hydra/
+*.log
+output_n2n/
+outputs/
+weights/*.pth
+weights/*.pt
+weights/*.ckpt
+
+# IDE / tooling
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

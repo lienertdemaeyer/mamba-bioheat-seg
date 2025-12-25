@@ -1,0 +1,26 @@
+# TRUE End-to-End 3D with 2x A100 GPUs + Physics Loss
+# Uses 3D convolutions on RAW frame sequences with bioheat equation constraint!
+
+training:
+  epochs: 100
+  batch_size: 4       # Total batch across 2 GPUs (2 per GPU)
+  lr: 2.0e-4
+  early_stop_patience: 25
+  device: cuda
+  use_physics_loss: true  # Enable bioheat equation constraint!
+
+data:
+  num_workers: 16
+  window_size: 100
+  n_input_frames: 50  # Number of frames for 3D input
+
+model:
+  base_channels: 16   # Smaller for 3D memory
+
+gpu:
+  enabled: true
+  device_id: 0
+
+output:
+  save_model: true
+  save_plots: true

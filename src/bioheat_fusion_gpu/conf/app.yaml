@@ -1,0 +1,69 @@
+# Unified Hydra entrypoint for training + inference.
+#
+# Usage examples:
+#   python -m bioheat_fusion_gpu.app task=train_mamba_pinn experiments=mamba_physics_informed
+#   python -m bioheat_fusion_gpu.app task=train_true_e2e experiments=2xa100_true_e2e_physics
+#   python -m bioheat_fusion_gpu.app task=infer_bioheat_vs_mamba_graphcut inference.mamba.model=/path/to/model.pth
+
+defaults:
+  - task: infer_bioheat_vs_mamba_graphcut
+  - _self_
+
+paths:
+  h5_dir: /dodrio/scratch/projects/starting_2025_090/H5
+  mask_path: /dodrio/scratch/projects/starting_2025_090/Annotations/coco_annotations_cooled_area.json
+  output_dir: /dodrio/scratch/projects/starting_2025_090/output_n2n
+
+# Base sections expected by existing training scripts. Most real runs override
+# these via `experiments=...` (loaded under `cfg.experiments`).
+data:
+  window_size: 100
+  window_step: 50
+  early_fraction: 0.3
+  late_fraction: 0.3
+  num_workers: 8
+  skip_pids: []
+
+model:
+  base_channels: 32
+  d_state: 16
+  n_mamba_layers: 4
+
+training:
+  epochs: 100
+  batch_size: 2
+  lr: 1.0e-4
+  early_stop_patience: 25
+  device: cuda
+
+physics:
+  alpha: 0.00014
+
+inference:
+  device: cuda
+  output_dir: ${paths.output_dir}/e2e_bioheat_graphcut_comparisons/bioheat_vs_mamba_${now:%Y%m%d_%H%M%S}
+  patients: [P02]
+  measurements: [M02]
+  mamba:
+    model: /dodrio/scratch/projects/starting_2025_090/output_n2n/models_20251223_114254/mamba_physics_informed_20251223_114254.pth
+    kind: pinn
+    num_frames: 480
+    target_h: 240
+    target_w: 320
+
+bioheat:
+  window_size: 100
+  window_step: 50
+  late_only_fusion: false
+  fuse_mode: median
+  fuse_percentile: 30.0
+
+graphcut:
+  lambda: 10.0
+  fg_pct: 85.0
+  bg_pct: 30.0
+  gamma: 1.5
+  min_component_px: 50
+
+viz:
+  clip_percentile: 99.0

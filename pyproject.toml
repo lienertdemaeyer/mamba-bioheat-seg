@@ -1,0 +1,33 @@
+[project]
+name = "bioheat-fusion-gpu"
+version = "0.1.0"
+description = "GPU-accelerated bioheat window fusion for thermal sequences"
+requires-python = ">=3.9"
+dependencies = [
+    "h5py",
+    "numpy",
+    "torch",
+    "tqdm",
+    "matplotlib",
+    "opencv-python-headless",
+    "hydra-core",
+    "omegaconf",
+    "hydra-submitit-launcher",
+]
+
+[project.scripts]
+bioheat-run = "bioheat_fusion_gpu.app:main"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["bioheat_fusion_gpu*"]
+exclude = ["conf*", "tests*"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.package-data]
+bioheat_fusion_gpu = ["conf/**/*.yaml"]

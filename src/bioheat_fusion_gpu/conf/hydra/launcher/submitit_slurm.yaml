@@ -1,0 +1,24 @@
+# @package hydra.launcher
+
+_target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+submitit_folder: ${hydra.run.dir}/.submitit/%j
+timeout_min: 120
+max_num_timeout: 0
+nodes: 1
+tasks_per_node: 1
+cpus_per_task: 16
+gpus_per_node: 1
+mem_gb: 64
+partition: gpu_rome_a100
+qos: null
+account: starting_2025_090
+name: ${hydra.job.name}
+stderr_to_stdout: false
+comment: null
+signal_delay_s: 30
+setup:
+  - "module load Miniconda3/25.7.0-2"
+  - "eval \"$(conda shell.bash hook)\""
+  - "conda activate /dodrio/scratch/projects/starting_2025_090/conda_envs/hmm"
+  - "export PYTHONNOUSERSITE=1"
+  - "export CUDA_DEVICE_ORDER=PCI_BUS_ID"

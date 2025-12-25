@@ -1,0 +1,36 @@
+# Mamba + Physics-Informed (PINN-style) training
+# Uses the same bioheat physics loss setup as `train_physics_informed.py`,
+# but predicts perfusion directly from the full frame sequence via Mamba blocks.
+
+data:
+  num_workers: 16
+  preprocess_device: cpu
+  window_size: 100
+  num_frames: 480
+  target_h: 240
+  target_w: 320
+  max_tasks: null
+  max_samples: null
+
+training:
+  epochs: 120
+  batch_size: 1
+  lr: 1.0e-4
+  early_stop_patience: 25
+  device: cuda
+
+  # Physics loss weights (same idea as physics_informed_net.py, but configurable here)
+  data_weight: 1.0
+  physics_weight: 0.5
+  smooth_weight: 0.05
+  edge_weight: 0.1
+
+model:
+  base_channels: 32
+  d_state: 16
+  n_mamba_layers: 4
+  temporal_mode: global_attn
+
+physics:
+  alpha: 0.00014
+  smoothing_sigma: 2.0

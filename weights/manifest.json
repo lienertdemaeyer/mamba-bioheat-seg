@@ -1,0 +1,13 @@
+{
+  "description": "Release assets to download into weights/ (fill in sha256 once uploaded).",
+  "assets": [
+    {
+      "name": "mamba_physics_informed_20251223_114254.pth",
+      "sha256": ""
+    },
+    {
+      "name": "true_e2e_3d_2gpu.pth",
+      "sha256": ""
+    }
+  ]
+}
