@@ -51,7 +51,22 @@ The framework consists of:
 
 ## Model Weights
 
-Pretrained weights are available via **GitHub Releases**. See `WEIGHTS.md` for download instructions.
+Pretrained weights are available via [GitHub Releases](https://github.com/lienertdemaeyer/mamba-bioheat-seg/releases/tag/v1.0.0).
+
+**Download:**
+```bash
+wget https://github.com/lienertdemaeyer/mamba-bioheat-seg/releases/download/v1.0.0/mamba_physics_informed_20251223_114254.pth -O weights/mamba_pinn.pth
+```
+
+**Load:**
+```python
+import torch
+from bioheat_fusion_gpu.mamba_pinn_net import MambaPINNNet
+
+model = MambaPINNNet(base_channels=32, d_state=16, n_mamba_layers=4)
+ckpt = torch.load("weights/mamba_pinn.pth", map_location="cpu")
+model.load_state_dict(ckpt["model_state_dict"])
+```
 
 ## Package Structure
 
